@@ -21,4 +21,4 @@
       (lambda (n)
         (lambda (f)
           (lambda (x)
-            (m f (n f x)))))))
+            (m f ((n f) x)))))))
