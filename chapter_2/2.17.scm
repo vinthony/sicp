@@ -1,0 +1,20 @@
+#lang planet neil/sicp
+(define (length items)
+  (define (length-iter a count)
+    (if (null? a)
+        count
+        (length-iter (cdr a) (+ 1 count))
+        ))
+  (length-iter items 0)
+  )
+(define (last-pair alist)
+  (let ((len (length alist)))
+    (define (last-pair-finder length alist)
+      (if (= length 1)
+          (car alist)
+          (last-pair-finder (- length 1) (cdr alist))
+          ))
+    (last-pair-finder len alist)
+    ))
+
+(last-pair (list 23 72 249 34))
