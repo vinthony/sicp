@@ -1,0 +1,22 @@
+#lang planet neil/sicp
+(define (flod-right op initial sequence)
+  (if (null? sequence)
+      initial
+      (op (car sequence) (flod-right  op initial (cdr sequence)))
+      ))
+(define (flod-left op initial sequence)
+  (define (iter result rest)
+    (if (null? rest)
+        result
+        (iter (op result (car rest))
+              (cdr rest))))
+  (iter initial sequence)
+  )
+(define alist (list 1 2 3 4))
+(define (reverse sequence)
+  (flod-right (lambda (x y) (append y (list x))) nil sequence))
+(define (reverse-2 sequence)
+  (flod-left (lambda (x y) (cons y x)) nil sequence))
+(display (reverse alist))
+(newline)
+(display (reverse-2 alist))
