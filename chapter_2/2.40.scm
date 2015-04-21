@@ -1,0 +1,33 @@
+#lang planet neil/sicp
+(define (accumulate op initial sequence)
+  (if (null? sequence)
+      initial
+      (op (car sequence)
+          (accumulate op initial (cdr sequence))
+          )
+      ))
+(define (flatmap proc seq) ;;生成序列
+  (accumulate append nil (map proc seq)))
+(define (smallest-divisor n)
+  (find-divisor n 2))
+(define (square n) (* n n))
+(define (divides? a b)
+  (= (remainder b a) 0))
+(define (find-divisor n test-divisor)
+  (cond ((> (square test-divisor) n) n)
+        ((divides? test-divisor n) test-divisor)
+        (else (find-divisor n (+ test-divisor 1)))
+        ))
+(define (prime? n);;求是否素数
+  (= n (smallest-divisor n)))
+
+(define (prime-sum? pair)
+  (prime? (+ (car pair) (cadr pair))))
+(define (enumerate-interval r b)
+  (if (or (< r b) (= r b))(cons r (enumerate-interval (+ 1 r) b))
+      '()
+      ))
+(define (unique-pairs)
+  (flatmap (lambda (i) (map (lambda (j) (list i j))
+                            (enumerate-interval 1 (- i 1))))))
+(display (enumerate-interval 1 10))
