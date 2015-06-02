@@ -2,6 +2,7 @@
 some codes during learning sicp
 
 - [ ] DrRacket can't load .scm
+- [ ] 2.58.b todo
 
 # environment
 
