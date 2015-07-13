@@ -1,0 +1,51 @@
+#lang racket
+(define (make-monitored f)
+  (let ((called 0))
+  (lambda (x) 
+    (if (eq? x 'how-many-calls?)
+        called
+        (begin (set! called (+ called 1)) 
+               (if (>= called 7)
+                   "call the policeman"
+                   "Insufficient funds"
+                   ))))))
+
+(define (make-account balance password)
+  (define (withdraw amount)
+    (if (>= balance amount)
+        (begin (set! balance (- balance amount)) 
+               balance)
+        "Insufficient funds"))
+  (define failed
+    (let ((called 0)) 
+      (lambda (a) 
+        (begin (set! called (+ called 1))
+               (if (>= called 7)
+                   "call the policeman"
+                   "errored password"
+                   )
+               ))))
+  (define (deposit amount)
+    (set! balance (+ balance amount)))
+  (define (dispatch m)
+    (cond ((eq? m 'withdraw) withdraw)
+          ((eq? m 'deposit) deposit)
+          ((eq? m 'failed) failed)
+          (else (error "Unknown request -- MAKE-ACCOUNT" m))))
+  (lambda (x y) 
+    (if (eq? password x)
+        (dispatch y)
+        (dispatch 'failed)
+        )))
+
+(define acc (make-account 100 'secret-password))
+((acc 'secret-password 'withdraw) 40)
+((acc 'some-other-password 'deposit) 50)
+((acc 'some-other-password 'deposit) 50)
+((acc 'some-other-password 'deposit) 50)
+((acc 'some-other-password 'deposit) 50)
+((acc 'some-other-password 'deposit) 50)
+((acc 'some-other-password 'deposit) 50)
+((acc 'some-other-password 'deposit) 50)
+((acc 'some-other-password 'deposit) 50)
+((acc 'some-other-password 'deposit) 50)
