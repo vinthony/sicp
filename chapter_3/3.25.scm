@@ -1,0 +1,48 @@
+;; 将key的参数设置成一个list list的car部分是key名称，cdr部分指向下一层
+ #lang planet neil/sicp
+
+(define (make-table)
+  (let ((local-table (list '*table*)))
+  (define (lookup dir)
+    (define (iter dir table)
+      (let ((record (assoc ((car dir) (cdr local-table)))))
+      (if (and record (null? (cdr dir)))
+                (cdr record)
+                (if (not (null? (cdr dir)))
+                    (iter (cdr dir) (cdr table)) false))
+            ))
+      (iter dir local-table))
+  (define (assoc key records)
+    (cond ((null? records) #f)
+          ((equal? key (caar records)) (car records))
+          (else (assoc key (cdr records)))
+          ))
+  (define (insert! dir value)
+    (define (iter d v current)
+      (if (null? d)
+          (set-cdr! current v)
+          (cond ((assoc (car d) table) (cons ))
+                (else
+                 (set-cdr! )
+                 )
+          ))
+    (let ((subtable (assoc (key-1 (cdr local-table)))))
+      (if subtable
+          (let ((record (assoc (key-2 (cdr subtable)))))
+            (if record
+                (set-cdr! record value)
+                (set-cdr! subtable
+                          (cons (cons key-2 value)
+                                (cdr subtable)))
+                )
+            ))
+           (set-cdr! local-table
+                     (cons (list key-1) (cons key-2 value))
+                     (cdr local-table))
+      ) 'ok)
+    (define (dispatch s)
+      (cond ((eq? s 'lookup) lookup)
+            ((eq? s 'insert) insert!)
+            (else (error "ERROR 'UNKNOW OPERATION'" s))
+            ))
+  dispatch))
